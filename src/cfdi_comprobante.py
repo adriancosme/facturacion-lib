@@ -27,13 +27,13 @@ class CfdiComprobante:
         self.cfdi_conceptos = []
         self.cfdi_impuestos = []
         self.cfdi_complemento = []
-        self.addenda = ''        
+        self.addenda = ''
 
     def emisor(self, emisor):
         self.cfdi_emisor = emisor
 
     def receptor(self, receptor):
-        self.cfdi_receptor = receptor    
+        self.cfdi_receptor = receptor
 
     def add_complemento(self, complemento):
         self.cfdi_complemento.append(complemento)
@@ -41,3 +41,9 @@ class CfdiComprobante:
     def add_schema_location(self, schema):
         self.schema_location.append(schema)
 
+    def comprobante_dict(self):
+        return {
+            'cfdi:Comprobante': {
+                '@xmlns': self.xmlns
+            }
+        }
