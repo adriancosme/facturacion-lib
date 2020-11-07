@@ -1,5 +1,9 @@
+import json
+
+
 class CfdiComprobante:
     concepts = []
+    impuestos = {}
 
     def __init__(self, version, fecha, sello, no_certificado, certificado, sub_total, moneda, total, tipo_comprobante,
                  lugar_expedicion):
@@ -46,6 +50,10 @@ class CfdiComprobante:
     def concepto(self, concept):
         self.concepts.append(concept.getConcept())
 
+    def imp(self, tax):
+        print(tax.getImpuesto())
+        self.impuestos.update(tax.getImpuesto())
+
     def comprobante_dict(self):
         print(self.concepts)
         return {
@@ -55,6 +63,7 @@ class CfdiComprobante:
                 '@xsi:schemaLocation': 'http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd',
                 'cfdi:Conceptos': {
                     'cfdi:Concepto': self.concepts
-                }
+                },
+                'cfdi:Impuestos': self.impuestos
             }
         }

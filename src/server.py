@@ -1,5 +1,7 @@
 from flask import Flask
 from flask import Response
+
+from src.cfdi_impuestos import CfdiImpuestos
 from src.cfdi_comprobante import CfdiComprobante
 from src.cfdi_concepto import CfdiConcepto
 import xmltodict
@@ -31,6 +33,9 @@ def hello_world():
         "Descuento": 'Descuento',
     })
     comprobante.concepto(concepto)
+    impues = CfdiImpuestos()
+    #print(impues.getImpuesto())
+    comprobante.imp(impues)
     xml = xmltodict.unparse(dictComprobante, pretty=True)
     print(xmltodict.unparse(dictComprobante, pretty=True))
     return Response(xml, mimetype='text/xml')
