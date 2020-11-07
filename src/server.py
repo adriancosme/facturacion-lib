@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import Response
 from src.cfdi_comprobante import CfdiComprobante
+from src.cfdi_concepto import CfdiConcepto
 import xmltodict
 import json
 
@@ -18,6 +19,18 @@ def hello_world():
     comprobante.metodo_pago = 'En efectivo'
 
     dictComprobante = comprobante.comprobante_dict()
+    concepto = CfdiConcepto({
+        "ClaveProdServ": 'ClaveProdServ',
+        "NoIdentificacion": 'NoIdentificacion',
+        "Cantidad": 'cantidad',
+        "ClaveUnidad": 'ClaveUnidad',
+        "Unidad": 'Unidad',
+        "Descripcion": 'Descripcion',
+        "ValorUnitario": 'ValorUnitario',
+        "Importe": 'Importe',
+        "Descuento": 'Descuento',
+    })
+    comprobante.concepto(concepto)
     xml = xmltodict.unparse(dictComprobante, pretty=True)
     print(xmltodict.unparse(dictComprobante, pretty=True))
     return Response(xml, mimetype='text/xml')

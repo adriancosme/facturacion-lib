@@ -16,35 +16,46 @@ class CfdiConcepto:
     existComplemnt = False;
 
     def __init__(self, object):
-        object = json.loads(object)
-        if object['ClaveProdServ']:
-            self.concepto.update({'@ClaveProdServ': object['ClaveProdServ']})
+        # print(object)
+        # object = json.loads(object)
+        if 'ClaveProdServ' in object:
+            self.concepto.update({'@ClaveProdServ': object.get('ClaveProdServ')})
         else:
             raise Exception("Must include ClaveProdServ in object ")
-        if object['Cantidad']:
-            self.concepto.update({'@Cantidad': object['Cantidad']})
+
+        if 'NoIdentificacion' in object:
+            self.concepto.update({'@NoIdentificacion': object.get('NoIdentificacion')})
+
+        if 'Cantidad' in object:
+            self.concepto.update({'@Cantidad': object.get('Cantidad')})
         else:
             raise Exception("Must include Cantidad in object ")
 
-        if object['ClaveUnidad']:
-            self.concepto.update({'@ClaveUnidad': object['ClaveUnidad']})
+        if 'ClaveUnidad' in object:
+            self.concepto.update({'@ClaveUnidad': object.get('ClaveUnidad')})
         else:
             raise Exception("Must include ClaveUnidad in object")
 
-        if object['Descripcion']:
-            self.concepto.update({'@Descripcion': object['Descripcion']})
+        if 'Unidad' in object:
+            self.concepto.update({'@Unidad': object.get('Unidad')})
+
+        if 'Descripcion' in object:
+            self.concepto.update({'@Descripcion': object.get('Descripcion')})
         else:
             raise Exception("Must include Descripcion in object ")
 
-        if object['ValorUnitario']:
-            self.concepto.update({'@ValorUnitario': object['ValorUnitario']})
+        if 'ValorUnitario' in object:
+            self.concepto.update({'@ValorUnitario': object.get('ValorUnitario')})
         else:
             raise Exception("Must include ValorUnitario in object ")
 
-        if object['Importe']:
-            self.concepto.update({'@Importe': object['Importe']})
+        if 'Importe' in object:
+            self.concepto.update({'@Importe': object.get('Importe')})
         else:
             raise Exception("Must include Importe in object ")
+
+        if 'Descuento' in object:
+            self.concepto.update({'@Descuento': object.get('Descuento')})
 
         self.cfdi_impuestos = None
         self.cfdi_info_aduanera = None

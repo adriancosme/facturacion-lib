@@ -27,7 +27,7 @@ lerna-debug.log*
 # Tests
 /coverage
 /.nyc_output
-
+!**/__pycache__/
 # IDEs and editors
 /.idea
 .project
