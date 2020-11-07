@@ -1,8 +1,10 @@
 from flask import Flask
 from flask import Response
 from src.cfdi_comprobante import CfdiComprobante
-app = Flask(__name__)
+import xmltodict
 import json
+
+app = Flask(__name__)
 
 
 @app.route('/')
@@ -14,7 +16,8 @@ def hello_world():
     comprobante.condiciones_pago = 'Contado'
     comprobante.descuento = '645.92'
     comprobante.metodo_pago = 'En efectivo'
-    json_str = json.dumps(comprobante.__dict__)
-    xml = json_str
-    print(xml)
+
+    dictComprobante = comprobante.comprobante_dict()
+    xml = xmltodict.unparse(dictComprobante, pretty=True)
+    print(xmltodict.unparse(dictComprobante, pretty=True))
     return Response(xml, mimetype='text/xml')

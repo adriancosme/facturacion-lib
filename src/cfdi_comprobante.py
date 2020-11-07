@@ -1,6 +1,7 @@
 class CfdiComprobante:
 
-    def __init__(self, version, fecha, sello, no_certificado, certificado, sub_total, moneda, total, tipo_comprobante, lugar_expedicion):
+    def __init__(self, version, fecha, sello, no_certificado, certificado, sub_total, moneda, total, tipo_comprobante,
+                 lugar_expedicion):
         self.xmlns = ''
         self.schema_location = []
         self.version = version
@@ -44,6 +45,8 @@ class CfdiComprobante:
     def comprobante_dict(self):
         return {
             'cfdi:Comprobante': {
-                '@xmlns': self.xmlns
+                '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+                '@xmlns:cfdi': 'http://www.sat.gob.mx/cfd/3',
+                '@xsi:schemaLocation': 'http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd'
             }
         }
