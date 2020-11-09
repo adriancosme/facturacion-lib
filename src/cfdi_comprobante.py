@@ -1,14 +1,11 @@
-import json
-
-
 class CfdiComprobante:
+    comprobante = {'cfdi:Comprobante': {
+    }}
     concepts = []
     impuestos = {}
 
     def __init__(self, version, fecha, sello, no_certificado, certificado, sub_total, moneda, total, tipo_comprobante,
                  lugar_expedicion):
-        self.xmlns = ['http://www.sat.gob.mx/cfd/3', 'http://www.w3.org/2001/XMLSchema-instance']
-        self.schema_location = ['http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd']
         self.version = version
         self.serie = ''
         self.folio = ''
@@ -35,36 +32,119 @@ class CfdiComprobante:
         self.cfdi_complemento = []
         self.addenda = ''
 
+    def add_xmlns(self, prefix, value):
+        if prefix is 'xsi':
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@xmlns:xsi': value})
+        elif prefix is 'cfdi':
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@xmlns:cfdi': value})
+        else:
+            raise Exception('Sin namespace')
+
+    def add_schema_location(self, value):
+        self.comprobante['cfdi:Comprobante'].update(
+            {'@xsi:schemaLocation': value})
+
+    def set_attr(self):
+        if self.version:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Version': self.version})
+        else:
+            raise Exception('El atributo version es requerido')
+        if self.serie:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Serie': self.serie})
+        if self.folio:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Folio': self.folio})
+        if self.fecha:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Fecha': self.fecha})
+        else:
+            raise Exception('El atributo fecha es requerido')
+        if self.sello:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Sello': self.sello})
+        else:
+            raise Exception('El atributo sello es requerido')
+        if self.forma_pago:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@FormaPago': self.forma_pago})
+        if self.no_certificado:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@NoCertificado': self.no_certificado})
+        else:
+            raise Exception('El atributo certificado es requerido')
+        if self.certificado:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Certificado': self.certificado})
+        else:
+            raise Exception('El atributo certificado es requerido')
+        if self.condiciones_pago:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@CondicionesDePago': self.condiciones_pago})
+        if self.sub_total:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@SubTotal': self.sub_total})
+        else:
+            raise Exception('El atributo subtotal es requerido')
+        if self.descuento:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Descuento': self.descuento})
+        if self.moneda:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Moneda': self.moneda})
+        else:
+            raise Exception('El atributo subtotal es requerido')
+        if self.tipo_cambio:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@TipoCambio': self.tipo_cambio})
+        if self.total:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Total': self.total})
+        else:
+            raise Exception('El atributo total es requerido')
+        if self.tipo_comprobante:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@TipoDeComprobante': self.tipo_comprobante})
+        else:
+            raise Exception('El atributo total es requerido')
+        if self.metodo_pago:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@MetodoPago': self.metodo_pago})
+        if self.lugar_expedicion:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@LugarExpedicion': self.lugar_expedicion})
+        if self.confirmacion:
+            self.comprobante['cfdi:Comprobante'].update(
+                {'@Confirmacion': self.confirmacion})
+
+    def set_serie(self):
+        self.comprobante['cfdi:Comprobante'].update(
+            {'@Serie': self.serie})
+
     def emisor(self, emisor):
         self.cfdi_emisor = emisor
+        self.comprobante['cfdi:Comprobante'].update(
+            {'cfdi:Emisor': self.cfdi_emisor})
 
     def receptor(self, receptor):
         self.cfdi_receptor = receptor
+        self.comprobante['cfdi:Comprobante'].update(
+            {'cfdi:Receptor': self.cfdi_receptor})
 
     def add_complemento(self, complemento):
         self.cfdi_complemento.append(complemento)
 
-    def add_schema_location(self, schema):
-        self.schema_location.append(schema)
-
     def concepto(self, concept):
         self.concepts.append(concept.getConcept())
+        self.comprobante['cfdi:Comprobante'].update(
+            {'cfdi:Conceptos': {'cfdi:Concepto': self.concepts}})
 
     def imp(self, tax):
-        print(tax.getImpuesto())
+        #print(tax.getImpuesto())
         self.impuestos.update(tax.getImpuesto())
 
     def comprobante_dict(self):
-        print(self.concepts)
-        return {
-            'cfdi:Comprobante': {
-                '@xmlns:xsi': self.xmlns[0],
-                '@xmlns:cfdi': self.xmlns[1],
-                '@xsi:schemaLocation': self.schema_location[0],
-                'cfdi:CfdiRelacionados': self.cfdi_relacionados,
-                'cfdi:Emisor': self.cfdi_emisor,
-                'cfdi:Receptor': self.cfdi_receptor,
-                'cfdi:Conceptos': self.cfdi_conceptos,
-                'cfdi:Impuestos': self.cfdi_impuestos
-            }
-        }
+        return self.comprobante
