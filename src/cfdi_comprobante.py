@@ -1,8 +1,14 @@
-class CfdiComprobante:
+import json
 
-    def __init__(self, version, fecha, sello, no_certificado, certificado, sub_total, moneda, total, tipo_comprobante, lugar_expedicion):
-        self.xmlns = ''
-        self.schema_location = []
+
+class CfdiComprobante:
+    concepts = []
+    impuestos = {}
+
+    def __init__(self, version, fecha, sello, no_certificado, certificado, sub_total, moneda, total, tipo_comprobante,
+                 lugar_expedicion):
+        self.xmlns = ['http://www.sat.gob.mx/cfd/3', 'http://www.w3.org/2001/XMLSchema-instance']
+        self.schema_location = ['http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd']
         self.version = version
         self.serie = ''
         self.folio = ''
@@ -41,11 +47,20 @@ class CfdiComprobante:
     def add_schema_location(self, schema):
         self.schema_location.append(schema)
 
+    def concepto(self, concept):
+        self.concepts.append(concept.getConcept())
+
+    def imp(self, tax):
+        print(tax.getImpuesto())
+        self.impuestos.update(tax.getImpuesto())
+
     def comprobante_dict(self):
+        print(self.concepts)
         return {
             'cfdi:Comprobante': {
-                '@xmlns': self.xmlns,
-                '@xsi:schemaLocation': self.schema_location,
+                '@xmlns:xsi': self.xmlns[0],
+                '@xmlns:cfdi': self.xmlns[1],
+                '@xsi:schemaLocation': self.schema_location[0],
                 'cfdi:CfdiRelacionados': self.cfdi_relacionados,
                 'cfdi:Emisor': self.cfdi_emisor,
                 'cfdi:Receptor': self.cfdi_receptor,

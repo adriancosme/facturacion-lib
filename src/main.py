@@ -1,6 +1,6 @@
-from cfdi_comprobante import CfdiComprobante
-from cfdi_emisor import CfdiEmisor
-from cfdi_receptor import CfdiReceptor
+from src.cfdi_comprobante import CfdiComprobante
+from src.cfdi_emisor import CfdiEmisor
+from src.cfdi_receptor import CfdiReceptor
 import xmltodict
 
 
@@ -18,7 +18,7 @@ receptor = CfdiReceptor('XAXX010101000', 'G01')
 comprobante.emisor(emisor.emisor_dict())
 comprobante.receptor(receptor.receptor_dict())
 dictComprobante = comprobante.comprobante_dict()
-print(xmltodict.unparse(dictComprobante, pretty=True))
+#print(xmltodict.unparse(dictComprobante, pretty=True))
 
 fruits = ["Apple", "Pear", "Peach", "Banana"]
 prices = [0.35, 0.40, 0.40, 0.28]
