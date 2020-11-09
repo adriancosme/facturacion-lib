@@ -44,6 +44,12 @@ class CfdiComprobante:
     def comprobante_dict(self):
         return {
             'cfdi:Comprobante': {
-                '@xmlns': self.xmlns
+                '@xmlns': self.xmlns,
+                '@xsi:schemaLocation': self.schema_location,
+                'cfdi:CfdiRelacionados': self.cfdi_relacionados,
+                'cfdi:Emisor': self.cfdi_emisor,
+                'cfdi:Receptor': self.cfdi_receptor,
+                'cfdi:Conceptos': self.cfdi_conceptos,
+                'cfdi:Impuestos': self.cfdi_impuestos
             }
         }
