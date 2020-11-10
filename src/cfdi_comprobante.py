@@ -2,7 +2,6 @@ class CfdiComprobante:
     comprobante = {'cfdi:Comprobante': {
     }}
     concepts = []
-    impuestos = {}
 
     def __init__(self, version, fecha, sello, no_certificado, certificado, sub_total, moneda, total, tipo_comprobante,
                  lugar_expedicion):
@@ -28,7 +27,7 @@ class CfdiComprobante:
         self.cfdi_emisor = ''
         self.cfdi_receptor = ''
         self.cfdi_conceptos = []
-        self.cfdi_impuestos = []
+        self.cfdi_impuestos = ''
         self.cfdi_complemento = []
         self.addenda = ''
 
@@ -142,9 +141,10 @@ class CfdiComprobante:
         self.comprobante['cfdi:Comprobante'].update(
             {'cfdi:Conceptos': {'cfdi:Concepto': self.concepts}})
 
-    def imp(self, tax):
-        #print(tax.getImpuesto())
-        self.impuestos.update(tax.getImpuesto())
+    def impuesto(self, impuesto):
+        self.cfdi_impuestos = impuesto
+        self.comprobante['cfdi:Comprobante'].update(
+            {'cfdi:Impuestos': self.cfdi_impuestos})
 
     def comprobante_dict(self):
         return self.comprobante

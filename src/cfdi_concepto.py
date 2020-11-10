@@ -13,7 +13,7 @@ class CfdiConcepto:
         '@Importe': '',
         # '@Descuento': '',
     }
-    existComplemnt = False;
+    existComplemnt = False
 
     def __init__(self, object):
         # print(object)
@@ -76,7 +76,7 @@ class CfdiConcepto:
         return self.concepto
 
     def isComplement(self):
-        return self.existComplemnt;
+        return self.existComplemnt
 
     def getComplementProperties(self):
         return ''

@@ -53,6 +53,6 @@ def hello_world():
     comprobante.concepto(concepto)
     impues = CfdiImpuestos()
     # print(impues.getImpuesto())
-    comprobante.imp(impues)
+    comprobante.impuesto(impues.get_impuesto)
     xml = xmltodict.unparse(dictComprobante, pretty=True)
     return Response(xml, mimetype='text/xml')
