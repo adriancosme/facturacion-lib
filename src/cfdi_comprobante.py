@@ -1,3 +1,8 @@
+import pkg_resources
+from lxml import etree as ET
+from xmltodict import parse
+
+
 class CfdiComprobante:
     comprobante = {'cfdi:Comprobante': {
     }}
@@ -119,6 +124,21 @@ class CfdiComprobante:
             self.comprobante['cfdi:Comprobante'].update(
                 {'@Confirmacion': self.confirmacion})
 
+    def set_sello(self, sello):
+        self.sello = sello
+        self.comprobante['cfdi:Comprobante'].update(
+            {'@Sello': self.sello})
+
+    def set_no_certificado(self, no_certificado):
+        self.no_certificado = no_certificado
+        self.comprobante['cfdi:Comprobante'].update(
+            {'@NoCertificado': self.no_certificado})
+
+    def set_certificado(self, certificado):
+        self.certificado = certificado
+        self.comprobante['cfdi:Comprobante'].update(
+            {'@Certificado': self.certificado})
+
     def set_serie(self):
         self.comprobante['cfdi:Comprobante'].update(
             {'@Serie': self.serie})
@@ -145,6 +165,14 @@ class CfdiComprobante:
         self.cfdi_impuestos = impuesto
         self.comprobante['cfdi:Comprobante'].update(
             {'cfdi:Impuestos': self.cfdi_impuestos})
+
+    def generate_cadena_original(self, xml):
+        xlst_file = pkg_resources.resource_filename(
+            __name__, 'resources/cadenaoriginal_3_3.xslt')
+        dom = ET.fromstring(xml)
+        xslt = ET.parse(xlst_file)
+        transform = ET.XSLT(xslt)
+        return str(transform(dom))
 
     def comprobante_dict(self):
         return self.comprobante
