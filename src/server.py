@@ -15,6 +15,7 @@ from pathlib import Path
 import xmltodict
 
 app = Flask(__name__)
+app.debug = True
 
 certificate = open('src/resources/certs/CSD/30001000000400002336.cer', 'rb')
 cer = base64.b64encode(certificate.read())
@@ -23,14 +24,9 @@ key_file = open(
 key = base64.b64encode(key_file.read())
 pwd = '12345678a'
 
-xsi = "http://www.w3.org/2001/XMLSchema-instance"
-
-schemaLocation = "'http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd"
-ns = "{xsi}"
-
 
 @app.route('/')
-def hello_world():
+def main():
     comprobante = CfdiComprobante('3.3', str(datetime.now().isoformat())[:19], 'asf', 'asf', 'asf', 16148.04, 'MXN', 17207.35, 'I',
                                   'Mexico')
     comprobante.add_xmlns('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
@@ -44,7 +40,6 @@ def hello_world():
     comprobante.descuento = '645.92'
     comprobante.metodo_pago = 'En efectivo'
     comprobante.set_attr()
-
     emisor = CfdiEmisor()
     emisor.set_rfc('XAXX010101000')
     emisor.set_nombre('nombre')
@@ -67,11 +62,20 @@ def hello_world():
         "Importe": 'Importe',
         "Descuento": 'Descuento',
     })
+    impues_concepto = CfdiImpuestos()
+    concepto_traslado = CfdiTrasladado(
+        '2250000', '002', 'Tasa', '0.160000', '360000')
+    concepto_retenciones = CfdiRentencion(
+        '2250000', '002', 'Tasa', '0.160000', '360000')
+    impues_concepto.set_traslados(concepto_traslado.get_trasladado())
+    impues_concepto.set_retenciones(concepto_retenciones.get_retencion())
+    concepto.impuestos(impues_concepto.get_impuesto())
+    comprobante.concepto(concepto)
     comprobante.concepto(concepto)
     impues = CfdiImpuestos()
     traslado = CfdiTrasladado('2250000', '002', 'Tasa', '0.160000', '360000')
     retenciones = CfdiRentencion(
-        '2250000', '002', 'Tasa', '0.160000', '360000')
+        '2250000', '002', 'Tasa', '0.160000', '360000')        
     impues.set_traslados(traslado.get_trasladado())
     impues.set_retenciones(retenciones.get_retencion())
     impues.set_total_impuestos_trasladados('12512')
@@ -88,3 +92,7 @@ def hello_world():
     comprobante.set_certificado(str(cer).replace("b'", ""))
     xml = xmltodict.unparse(dictComprobante)
     return Response(xml, mimetype='text/xml')
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
